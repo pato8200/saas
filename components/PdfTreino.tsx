@@ -330,74 +330,83 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
 
   // Translate exercise tips from Portuguese to English
   const translateTip = (tip: string): string => {
+    // First normalize text (remove accents) for matching
+    const normalizeText = (text: string) => {
+      return text
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+        .replace(/°/g, '') // Remove degree symbol
+        .toLowerCase();
+    };
+    
     const translations: Record<string, string> = {
-      // Core/Abs exercises
-      'Contraia gluteos e abdomen fortemente': 'Contract glutes and abs hard',
-      'Nao deixe quadril cair ou subir demais': "Don't let hips drop or rise too much",
+      // Core/Abs exercises - with accents (original from PDF)
+      'Contraia glúteos e abdômen fortemente': 'Contract glutes and abs hard',
+      'Não deixe quadril cair ou subir demais': "Don't let hips drop or rise too much",
       'Lying down, levante pernas e tronco formando V': 'Lying down, lift legs and torso forming V',
-      'Segure haltere se necessario': 'Hold dumbbell if needed',
+      'Segure haltere se necessário': 'Hold dumbbell if needed',
       'Lying down, pernas estendidas': 'Lying down, legs extended',
-      'Eleve ate 90 sem descolar lombar do chao': 'Lift to 90 without lifting lower back from floor',
-      'Desca lentamente': 'Lower slowly',
-      'Lying down, joelhos 90': 'Lying down, knees at 90',
-      'Eleve quadril do chao usando abdominal inferior': 'Lift hips from floor using lower abs',
-      'Control the descent': 'Control the descent',
-      'Lying down, abra bracos e pernas formando X': 'Lying down, open arms and legs forming X',
-      'Feche trazendo maos aos pes contraindo abdomen': 'Close bringing hands to feet contracting abs',
-      'Posicao de plank': 'Plank position',
-      'traga joelhos alternadamente em direcao ao peito': 'bring knees alternately toward chest',
-      'Rapido e controlado': 'Fast and controlled',
+      'Eleve até 90° sem descolar lombar do chão': 'Lift to 90 without lifting lower back from floor',
+      'Desça lentamente': 'Lower slowly',
+      'Lying down, joelhos 90°': 'Lying down, knees at 90',
+      'Eleve quadril do chão usando abdominal inferior': 'Lift hips from floor using lower abs',
+      'Controle a descida': 'Control the descent',
+      'Lying down, abra braços e pernas formando X': 'Lying down, open arms and legs forming X',
+      'Feche trazendo mãos aos pés contraindo abdômen': 'Close bringing hands to feet contracting abs',
+      'Posição de plank': 'Plank position',
+      'traga joelhos alternadamente em direção ao peito': 'bring knees alternately toward chest',
+      'Rápido e controlado': 'Fast and controlled',
       'Lying down, joelhos flexionados': 'Lying down, knees bent',
-      'Eleve tronco contraindo abdomen superior': 'Lift torso contracting upper abs',
+      'Eleve tronco contraindo abdômen superior': 'Lift torso contracting upper abs',
       'Segure 1s no topo': 'Hold 1s at top',
       'Pendurado na barra': 'Hanging from bar',
-      'suba joelhos em direcao ao peito': 'lift knees toward chest',
-      'Nao balance o corpo': "Don't swing body",
+      'suba joelhos em direção ao peito': 'lift knees toward chest',
+      'Não balance o corpo': "Don't swing body",
       'Lying down, levante pernas e tronco simultaneamente': 'Lying down, lift legs and torso simultaneously',
-      'tentando tocar os pes': 'trying to touch feet',
-      'Pes elevados': 'Feet elevated',
-      'gire tronco tocando chao cada lado': 'rotate torso touching floor each side',
-      'Olhe sempre para as maos durante movimento': 'Always look at hands during movement',
-      'Posicao de plank, corra trazendo joelhos ao peito': 'Plank position, run bringing knees to chest',
-      'Core contraido': 'Core engaged',
-      'Lying down, levante pernas e ombros do chao': 'Lying down, lift legs and shoulders off floor',
-      'Lombar pressionada no chao': 'Lower back pressed to floor',
-      'Posicao de banana': 'Banana position',
-      'Estenda braco e perna opostos simultaneamente': 'Extend opposite arm and leg simultaneously',
+      'tentando tocar os pés': 'trying to touch feet',
+      'Pés elevados': 'Feet elevated',
+      'gire tronco tocando chão cada lado': 'rotate torso touching floor each side',
+      'Olhe sempre para as mãos durante movimento': 'Always look at hands during movement',
+      'Posição de plank, corra trazendo joelhos ao peito': 'Plank position, run bringing knees to chest',
+      'Core contraído': 'Core engaged',
+      'Lying down, levante pernas e ombros do chão': 'Lying down, lift legs and shoulders off floor',
+      'Lombar pressionada no chão': 'Lower back pressed to floor',
+      'Posição de banana': 'Banana position',
+      'Estenda braço e perna opostos simultaneamente': 'Extend opposite arm and leg simultaneously',
       'com controle': 'with control',
-      'Posicao de plank alta': 'High plank position',
+      'Posição de plank alta': 'High plank position',
       'toque ombro oposto alternadamente': 'touch opposite shoulder alternately',
-      'Mantenha quadril estavel': 'Keep hips stable',
-      'Apoie antebraco e lateral do pe': 'Support forearm and side of foot',
+      'Mantenha quadril estável': 'Keep hips stable',
+      'Apoie antebraço e lateral do pé': 'Support forearm and side of foot',
       'Quadril alto': 'Hips high',
       'corpo alinhado': 'body aligned',
-      'Foque em obliquos': 'Focus on obliques',
+      'Foque em oblíquos': 'Focus on obliques',
       'Sentado': 'Sitting',
-      'Lean torso 45': 'Lean torso 45',
+      'Lean torso 45°': 'Lean torso 45',
       'Gire medicine ball ou haltere': 'Rotate medicine ball or dumbbell',
       'de um lado para outro': 'from side to side',
-      'Pes abrem e fecham': 'Feet open and close',
-      'bracos sobem e descem': 'arms go up and down',
+      'Pés abrem e fecham': 'Feet open and close',
+      'braços sobem e descem': 'arms go up and down',
       'Ritmo constante': 'Constant rhythm',
-      'respiracao controlada': 'controlled breathing',
-      'nao atras do pescoco': 'not behind neck',
+      'respiração controlada': 'controlled breathing',
+      'não atrás do pescoço': 'not behind neck',
       'COTOVELOS BAIXOS': 'ELBOWS DOWN',
-      'INCLINE TRONCO 15 para TRAS': 'LEAN TORSO BACK 15',
+      'INCLINE TRONCO 15° para TRÁS': 'LEAN TORSO BACK 15',
       'CONTRAIA DORSAIS': 'CONTRACT LATS',
       'POLIA ALTA com CORDA': 'HIGH PULLEY with ROPE',
-      'Puxe em direcao a TESTA': 'Pull toward FOREHEAD',
+      'Puxe em direção à TESTA': 'Pull toward FOREHEAD',
       'ABRINDO COTOVELOS': 'OPENING ELBOWS',
-      'ROTACAO EXTERNA': 'EXTERNAL ROTATION',
+      'ROTAÇÃO EXTERNA': 'EXTERNAL ROTATION',
       'FOQUE em DELTOIDE POSTERIOR': 'FOCUS on REAR DELTOID',
-      'TRAPEZIO INFERIOR': 'LOWER TRAPEZIUS',
+      'TRAPÉZIO INFERIOR': 'LOWER TRAPEZIUS',
       'Cotovelos colados no corpo': 'Elbows glued to body',
-      'Suba contraindo biceps fortemente': 'Rise contracting biceps hard',
-      'desca controlando por 3 segundos': 'lower controlling for 3 seconds',
+      'Suba contraindo bíceps fortemente': 'Rise contracting biceps hard',
+      'desça controlando por 3 segundos': 'lower controlling for 3 seconds',
       'Cotovelo apoiado na coxa': 'Elbow supported on thigh',
-      'Foque em pico de contracao': 'Focus on peak contraction',
+      'Foque em pico de contração': 'Focus on peak contraction',
       'Movimento lento e controlado': 'Slow and controlled movement',
-      'BARRA FIXA no CHAO': 'BAR FIXED on GROUND',
-      'Pegue em direcao ao PEITO': 'Pull toward CHEST',
+      'BARRA FIXA no CHÃO': 'BAR FIXED on GROUND',
+      'Pegue em direção ao PEITO': 'Pull toward CHEST',
       'COTOVELOS ALTOS': 'ELBOWS HIGH',
       'CONTRAIA MEIO DAS COSTAS': 'CONTRACT MID-BACK',
       'Knees go forward': 'Knees go forward',
@@ -562,14 +571,29 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
       'and jump forward max': 'and jump forward max',
       'Land with both feet': 'Land with both feet',
       'simultaneously': 'simultaneously',
-    };
+     
+
+  };
+
     
-    let translated = tip;
-    Object.keys(translations).forEach(key => {
-      translated = translated.replace(new RegExp(key, 'gi'), translations[key]);
-    });
-    
-    return translated;
+   // Normalize the input tip for matching
+   const normalizedTip = normalizeText(tip);
+   
+   let translated = tip;
+   
+   // Try to find translation by normalizing keys
+   for (const [ptKey, enValue] of Object.entries(translations)) {
+     if (normalizeText(ptKey) === normalizedTip || tip.toLowerCase().includes(normalizeText(ptKey))) {
+       return enValue;
+     }
+   }
+   
+   // If no exact match, try partial replacements
+   Object.keys(translations).forEach(key => {
+    translated = translated.replace(new RegExp(key, 'gi'), translations[key]);
+   });
+   
+   return translated;
   };
 
   // Translate exercise names from Portuguese to English
