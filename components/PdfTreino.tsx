@@ -341,33 +341,55 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
   // Translate exercise tips from Portuguese to English
   const translateTip = (tip: string): string => {
     const translations: Record<string, string> = {
-      'Retraia ESCÁPULAS': 'Retract SHOULDER BLADES',
-      'Barra toca parte INFERIOR do peito': 'Bar touches LOWER part of chest',
-      'Cotovelos 45° do corpo': 'Elbows at 45° from body',
-      'Exploda na subida': 'Explode on the way up',
-      'Movimento de abraço': 'Hugging motion',
-      'Alongue máximo embaixo': 'Maximum stretch at bottom',
-      'Contraia forte em cima': 'Contract hard at top',
-      'sem bater halteres': 'without clashing dumbbells',
-      'MANTENHA cotovelos APONTANDO PARA FRENTE': 'KEEP elbows POINTING FORWARD',
-      'SUBA EXTENDENDO COMPLETAMENTE': 'RISE FULLY EXTENDING',
-      'Haltere com DUAS MÃOS atrás da CABEÇA': 'Dumbbell with BOTH HANDS behind HEAD',
-      'Estenda COTOVELOS COMPLETAMENTE no TOPO': 'FULLY EXTEND ELBOWS at TOP',
-      'Levante braços até ALTURA DOS OMBROS': 'Raise arms to SHOULDER HEIGHT',
-      'Polegares levemente para BAIXO': 'Thumbs slightly DOWN',
-      'como despejar água': 'like pouring water',
-      'NÃO balance tronco': 'DO NOT swing torso',
-      'Isolamento total': 'Total isolation',
-      'Alternar braços': 'Alternate arms',
-      'Suba um de cada vez': 'Raise one at a time',
-      'Controle a descida': 'Control the descent',
-      'Foco em deltoide ANTERIOR': 'Focus on ANTERIOR deltoid',
-      'Braços LEVEMENTE flexionados': 'Arms SLIGHTLY bent',
-      'Abra até sentir alongar': 'Open until you feel the stretch',
-      'Feche contraindo pico': 'Close contracting the peak',
-      'Polegares apontam para teto': 'Thumbs point to ceiling',
-      'PEGADA PRONADA LARGA': 'WIDE PRONATED GRIP',
-      'Puxe BARRA em direção ao PEITO': 'Pull BAR toward CHEST',
+      // Core/Abs exercises
+      'Contraia glúteos e abdômen fortemente': 'Contract glutes and abs hard',
+      'Não deixe quadril cair ou subir demais': "Don't let hips drop or rise too much",
+      'Lying down, levante pernas e tronco formando V': 'Lying down, lift legs and torso forming V',
+      'Segure haltere se necessário': 'Hold dumbbell if needed',
+      'Lying down, pernas estendidas': 'Lying down, legs extended',
+      'Eleve até 90° sem descolar lombar do chão': 'Lift to 90° without lifting lower back from floor',
+      'Desça lentamente': 'Lower slowly',
+      'Lying down, joelhos 90°': 'Lying down, knees at 90°',
+      'Eleve quadril do chão usando abdominal inferior': 'Lift hips from floor using lower abs',
+      'Control the descent': 'Control the descent',
+      'Lying down, abra braços e pernas formando X': 'Lying down, open arms and legs forming X',
+      'Feche trazendo mãos aos pés contraindo abdômen': 'Close bringing hands to feet contracting abs',
+      'Posição de plank': 'Plank position',
+      'traga joelhos alternadamente em direção ao peito': 'bring knees alternately toward chest',
+      'Rápido e controlado': 'Fast and controlled',
+      'Lying down, joelhos flexionados': 'Lying down, knees bent',
+      'Eleve tronco contraindo abdômen superior': 'Lift torso contracting upper abs',
+      'Segure 1s no topo': 'Hold 1s at top',
+      'Pendurado na barra': 'Hanging from bar',
+      'suba joelhos em direção ao peito': 'lift knees toward chest',
+      'Não balance o corpo': "Don't swing body",
+      'Lying down, levante pernas e tronco simultaneamente': 'Lying down, lift legs and torso simultaneously',
+      'tentando tocar os pés': 'trying to touch feet',
+      'Pés elevados': 'Feet elevated',
+      'gire tronco tocando chão cada lado': 'rotate torso touching floor each side',
+      'Olhe sempre para as mãos durante movimento': 'Always look at hands during movement',
+      'Posição de plank, corra trazendo joelhos ao peito': 'Plank position, run bringing knees to chest',
+      'Core contraído': 'Core engaged',
+      'Lying down, levante pernas e ombros do chão': 'Lying down, lift legs and shoulders off floor',
+      'Lombar pressionada no chão': 'Lower back pressed to floor',
+      'Posição de banana': 'Banana position',
+      'Estenda braço e perna opostos simultaneamente': 'Extend opposite arm and leg simultaneously',
+      'com controle': 'with control',
+      'Posição de plank alta': 'High plank position',
+      'toque ombro oposto alternadamente': 'touch opposite shoulder alternately',
+      'Mantenha quadril estável': 'Keep hips stable',
+      'Apoie antebraço e lateral do pé': 'Support forearm and side of foot',
+      'Quadril alto': 'Hips high',
+      'corpo alinhado': 'body aligned',
+      'Foque em oblíquos': 'Focus on obliques',
+      'Sentado': 'Sitting',
+      'Lean torso 45°': 'Lean torso 45°',
+      'Gire medicine ball ou haltere': 'Rotate medicine ball or dumbbell',
+      'de um lado para outro': 'from side to side',
+      'Pés abrem e fecham': 'Feet open and close',
+      'braços sobem e descem': 'arms go up and down',
+      'Ritmo constante': 'Constant rhythm',
+      'respiração controlada': 'controlled breathing',
       'não atrás do pescoço': 'not behind neck',
       'COTOVELOS BAIXOS': 'ELBOWS DOWN',
       'INCLINE TRONCO 15° para TRÁS': 'LEAN TORSO BACK 15°',
@@ -578,6 +600,20 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
 
   // Translate category from Portuguese to English for display
   const translateCategory = (categoria: string): string => {
+    // First, map English form categories to Portuguese
+    const englishToPortuguese: Record<string, string> = {
+      'hypertrophy': 'hipertrofia',
+      'weight_loss': 'emagrecimento',
+      'strength': 'forca',
+      'endurance': 'resistencia',
+      'abs_challenge': 'desafio_trincar_abdomen',
+      'shape_evolution': 'evoluir_shape'
+    };
+    
+    // Convert if it's English
+    const categoriaPortuguesa = englishToPortuguese[categoria.toLowerCase()] || categoria;
+    
+    // Then translate Portuguese to English display
     const translations: Record<string, string> = {
       'hipertrofia': 'HYPERTROPHY',
       'emagrecimento': 'FAT BURN',
@@ -586,7 +622,8 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
       'desafio_trincar_abdomen': 'ABS CHALLENGE',
       'evoluir_shape': 'SHAPE EVOLUTION'
     };
-    return translations[categoria] || 'CUSTOMIZED TRAINING';
+    
+    return translations[categoriaPortuguesa] || 'CUSTOMIZED TRAINING';
   };
 
   return (
