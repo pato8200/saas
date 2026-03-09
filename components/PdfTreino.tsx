@@ -323,19 +323,9 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
 
   const sevenDays = allTrainingDays.slice(0, 7);
 
-  // Calcular idade a partir da data de nascimento
-  const calculateAge = () => {
-    if (!anamneseData.dataNascimento) return 0;
-    const birthDate = new Date(anamneseData.dataNascimento);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    
-    return age;
+  // Use age directly from form data (form collects age, not birth date)
+  const getAge = () => {
+    return anamneseData.idade || 25;
   };
 
   // Translate exercise tips from Portuguese to English
@@ -582,6 +572,144 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
     return translated;
   };
 
+  // Translate exercise names from Portuguese to English
+  const translateExerciseName = (name: string): string => {
+    const translations: Record<string, string> = {
+      // Core/Abs exercises
+      'Prancha Abdominal': 'Plank',
+      'Russian Twist': 'Russian Twist',
+      'Dead Bug': 'Dead Bug',
+      'Mountain Climber': 'Mountain Climber',
+      'Abdominal Infra': 'Leg Raise',
+      'Abdominal Remador': 'V-Tuck Crunch',
+      'Bicicleta Abdominal': 'Bicycle Crunch',
+      'Elevação de Joelhos Suspenso': 'Hanging Knee Raise',
+      'Abdominal Canivete': 'Pike Crunch',
+      'Prancha com Toque no Ombro': 'Plank Shoulder Tap',
+      'Hollow Body Hold': 'Hollow Body Hold',
+      'V-Up': 'V-Up',
+      'Prancha Lateral': 'Side Plank',
+      'Rotação Russa': 'Russian Twist',
+      'Abdominal Reverso': 'Reverse Crunch',
+      'Abdominal Supra': 'Crunch',
+      'Escalador (Mountain Climber)': 'Mountain Climber',
+      'Prancha Dinâmica': 'Dynamic Plank',
+      'Leg Raise (Elevação de Pernas)': 'Leg Raise',
+      'Crunch Inverso': 'Inverse Crunch',
+      'Mountain Climbers': 'Mountain Climber',
+      'Corrida Estacionária': 'Stationary Jog',
+      'Polichinelos': 'Jumping Jacks',
+      
+      // Chest exercises
+      'Supino Reto com Barra': 'Barbell Bench Press',
+      'Supino Inclinado com Halteres': 'Incline Dumbbell Press',
+      'Supino Declinado com Barra': 'Decline Barbell Press',
+      'Crucifixo Inclinado': 'Incline Fly',
+      'Crucifixo Reto': 'Flat Fly',
+      'Flexão de Braço': 'Push-up',
+      'Crossover Polia Alta': 'High Cable Crossover',
+      'Peck Deck (Voador)': 'Pec Deck',
+      'Pull-Over com Haltere': 'Dumbbell Pullover',
+      'Flexão Diamante': 'Diamond Push-up',
+      
+      // Back exercises
+      'Barra Fixa (Pull-Up)': 'Pull-up',
+      'Puxada Alta (Lat Pulldown)': 'Lat Pulldown',
+      'Remada Curvada com Barra': 'Bent-over Barbell Row',
+      'Remada Curvada com Halteres (Ambas Mãos)': 'Bent-over Dumbbell Row',
+      'Remada Unilateral com Haltere': 'One-arm Dumbbell Row',
+      'Remada Cavalinho (Máquina)': 'Machine Row',
+      'Remada Baixa Triângulo': 'Seated Cable Row',
+      'Serrote (One-Arm Row)': 'One-arm Row',
+      'T-Bar Row': 'T-Bar Row',
+      'Face Pull (Posterior de Ombro/Trapézio)': 'Face Pull',
+      
+      // Shoulder exercises
+      'Desenvolvimento Militar com Halteres': 'Seated Dumbbell Press',
+      'Desenvolvimento Militar com Barra': 'Military Press',
+      'Elevação Lateral': 'Lateral Raise',
+      'Elevação Frontal com Barra': 'Barbell Front Raise',
+      'Elevação Frontal com Halteres Alternada': 'Alternating Dumbbell Front Raise',
+      'Desenvolvimento Arnold': 'Arnold Press',
+      'Face Pull': 'Face Pull',
+      'Crucifixo Inverso (Posterior)': 'Reverse Fly',
+      'Remada Alta (Upright Row)': 'Upright Row',
+      
+      // Biceps exercises
+      'Rosca Direta com Barra W': 'EZ Bar Curl',
+      'Rosca Martelo Alternada': 'Alternating Hammer Curl',
+      'Rosca Scott': 'Preacher Curl',
+      'Rosca Concentrada': 'Concentration Curl',
+      'Rosca 21': '21s Curl',
+      
+      // Triceps exercises
+      'Tríceps Corda': 'Rope Tricep Pushdown',
+      'Tríceps Testa': 'Skull Crusher',
+      'Tríceps Francês': 'Overhead Tricep Extension',
+      'Tríceps Banco (Dips)': 'Bench Dip',
+      'Tríceps Polia Unilateral': 'Single-arm Cable Pushdown',
+      'Skull Crusher (Barra Reta)': 'Skull Crusher',
+      'Close-Grip Bench Press': 'Close-grip Bench Press',
+      
+      // Legs exercises
+      'Barbell Back Squat': 'Barbell Back Squat',
+      '45° Leg Press': '45° Leg Press',
+      'Leg Extension': 'Leg Extension',
+      'Bulgarian Split Squat': 'Bulgarian Split Squat',
+      'Hack Squat': 'Hack Squat',
+      'Dumbbell Walking Lunge': 'Walking Dumbbell Lunge',
+      'Goblet Squat': 'Goblet Squat',
+      'Front Squat': 'Front Squat',
+      'Step-Up': 'Step-up',
+      'Sissy Squat': 'Sissy Squat',
+      
+      // Calves exercises
+      'Standing Calf Raise': 'Standing Calf Raise',
+      'Seated Calf Raise': 'Seated Calf Raise',
+      'Leg Press Calf Raise': 'Leg Press Calf Raise',
+      'Single-Leg Calf Raise': 'Single-leg Calf Raise',
+      'Donkey Calf Raise': 'Donkey Calf Raise',
+      'Smith Machine Calf Raise': 'Smith Machine Calf Raise',
+      
+      // Hamstrings/Glutes
+      'Stiff com Barra': 'Romanian Deadlift',
+      'Mesa Flexora': 'Lying Leg Curl',
+      'Cadeira Flexora': 'Seated Leg Curl',
+      'Good Morning': 'Good Morning',
+      'Swing com Kettlebell': 'Kettlebell Swing',
+      'Elevação Pélvica (Hip Thrust)': 'Hip Thrust',
+      'Agachamento Sumô': 'Sumo Squat',
+      'Cadeira Abdutora': 'Hip Abductor Machine',
+      'Avanço Caminhando': 'Walking Lunge',
+      'Coice na Polia': 'Cable Kickback',
+      
+      // Plyometrics
+      'Box Jump': 'Box Jump',
+      'Broad Jump': 'Broad Jump',
+      'Jump Squat': 'Jump Squat',
+      'Depth Jump': 'Depth Jump',
+      'Medicine Ball Slam': 'Medicine Ball Slam',
+      'Horizontal Broad Jump': 'Standing Long Jump',
+      'Burpees com Salto': 'Burpee Box Jump',
+      'Skater Jumps': 'Skater Jump',
+      'Tuck Jumps': 'Tuck Jump',
+      'Power Clean': 'Power Clean',
+      
+      // Full body
+      'Thruster (Agachamento + Desenvolvimento)': 'Thruster',
+      'Renegade Row': 'Renegade Row',
+      'Kettlebell Swing': 'Kettlebell Swing',
+      'Man Makers': 'Man Maker',
+      
+      // Agility
+      'Drill de Agilidade - T-Drill': 'T-Drill Agility',
+      'Escada de Agilidade': 'Agility Ladder',
+      'Shuttle Run': 'Shuttle Run'
+    };
+    
+    return translations[name] || name;
+  };
+
   // Get title based on objective (in English)
   const getObjectiveTitle = () => {
     const categoria = anamneseData.categoria?.toLowerCase() || '';
@@ -655,7 +783,7 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
             <Text style={styles.infoLabel}>HEIGHT</Text>
           </View>
           <View style={styles.infoItem}>
-            <Text style={styles.infoValue}>{calculateAge()}</Text>
+            <Text style={styles.infoValue}>{getAge()}</Text>
             <Text style={styles.infoLabel}>AGE</Text>
           </View>
         </View>
@@ -685,7 +813,7 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
             <View key={exIndex} style={styles.exerciseItem}>
               <View style={styles.exerciseHeader}>
                 <Text style={styles.exerciseNumber}>{String(exIndex + 1).padStart(2, '0')}</Text>
-                <Text style={styles.exerciseName}>{exercicio.nome || 'Exercise'}</Text>
+                <Text style={styles.exerciseName}>{translateExerciseName(exercicio.nome) || 'Exercise'}</Text>
               </View>
               
               <View style={styles.exerciseDetails}>
@@ -769,9 +897,18 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
         {workoutPlan.notasSeguranca && workoutPlan.notasSeguranca.length > 0 && (
           <View style={styles.warningBox}>
             <Text style={styles.warningTitle}>⚠️ ATTENTION</Text>
-            {workoutPlan.notasSeguranca.map((nota: string, index: number) => (
-              <Text key={index} style={styles.warningText}>• {nota}</Text>
-            ))}
+            {workoutPlan.notasSeguranca.map((nota: string, index: number) => {
+              // Translate safety notes from Portuguese to English
+              const translations: Record<string, string> = {
+                'Hidrate-se adequadamente antes, durante e após o treino': 'Hydrate adequately before, during and after training',
+                'Respeite os dias de descanso para recuperação muscular': 'Respect rest days for muscle recovery',
+                'Durma 7-9 horas por noite para resultados ótimos': 'Sleep 7-9 hours per night for optimal results',
+                'Alimente seu corpo adequadamente de acordo com seus objetivos': 'Fuel your body properly according to your goals',
+                'Consulte um médico antes de iniciar qualquer programa de exercícios': 'Consult a physician before starting any exercise program'
+              };
+              const translatedNote = translations[nota] || nota;
+              return <Text key={index} style={styles.warningText}>• {translatedNote}</Text>;
+            })}
           </View>
         )}
               
