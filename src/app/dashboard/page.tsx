@@ -51,6 +51,7 @@ const DashboardPage = () => {
     setGenerating(true);
     try {
       console.log('🧠 Generating workout with LOCAL AI (INSTANT)...');
+      console.log('📋 Current userData:', JSON.stringify(userData, null, 2));
       
       // CRITICAL: Add timestamp to URL to force different workouts every time
       const response = await fetch('/api/gerar-treino?timestamp=' + Date.now(), {
@@ -66,11 +67,19 @@ const DashboardPage = () => {
       const data = await response.json();
       const treino = data.treino;
       
+      console.log('✅ Workout generated! First day exercises:', treino.semanas?.[0]?.divisaoSemanal?.[0]?.exercicios?.map((e: any) => e.nome).join(', '));
+      console.log('📊 Category used:', treino.periodizacao?.objetivo);
+      
       // Save to localStorage
       localStorage.setItem('workoutPlan', JSON.stringify(treino));
-      setWorkoutPlan(treino);
       
-      console.log('✅ Workout generated successfully!');
+      // CRITICAL FIX: Force state update with NEW object reference
+      setWorkoutPlan(null); // Clear first
+      setTimeout(() => {
+        setWorkoutPlan({ ...treino }); // Then set with spread to ensure new reference
+      }, 10);
+      
+      console.log('✅ State updated, PDF ready for download!');
       alert('✅ Workout generated successfully! Each generation is unique and different from the previous one.');
     } catch (error) {
       console.error('❌ Error:', error);

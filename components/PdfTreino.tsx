@@ -338,20 +338,242 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
     return age;
   };
 
-  // Título baseado no objetivo
+  // Translate exercise tips from Portuguese to English
+  const translateTip = (tip: string): string => {
+    const translations: Record<string, string> = {
+      'Retraia ESCÁPULAS': 'Retract SHOULDER BLADES',
+      'Barra toca parte INFERIOR do peito': 'Bar touches LOWER part of chest',
+      'Cotovelos 45° do corpo': 'Elbows at 45° from body',
+      'Exploda na subida': 'Explode on the way up',
+      'Movimento de abraço': 'Hugging motion',
+      'Alongue máximo embaixo': 'Maximum stretch at bottom',
+      'Contraia forte em cima': 'Contract hard at top',
+      'sem bater halteres': 'without clashing dumbbells',
+      'MANTENHA cotovelos APONTANDO PARA FRENTE': 'KEEP elbows POINTING FORWARD',
+      'SUBA EXTENDENDO COMPLETAMENTE': 'RISE FULLY EXTENDING',
+      'Haltere com DUAS MÃOS atrás da CABEÇA': 'Dumbbell with BOTH HANDS behind HEAD',
+      'Estenda COTOVELOS COMPLETAMENTE no TOPO': 'FULLY EXTEND ELBOWS at TOP',
+      'Levante braços até ALTURA DOS OMBROS': 'Raise arms to SHOULDER HEIGHT',
+      'Polegares levemente para BAIXO': 'Thumbs slightly DOWN',
+      'como despejar água': 'like pouring water',
+      'NÃO balance tronco': 'DO NOT swing torso',
+      'Isolamento total': 'Total isolation',
+      'Alternar braços': 'Alternate arms',
+      'Suba um de cada vez': 'Raise one at a time',
+      'Controle a descida': 'Control the descent',
+      'Foco em deltoide ANTERIOR': 'Focus on ANTERIOR deltoid',
+      'Braços LEVEMENTE flexionados': 'Arms SLIGHTLY bent',
+      'Abra até sentir alongar': 'Open until you feel the stretch',
+      'Feche contraindo pico': 'Close contracting the peak',
+      'Polegares apontam para teto': 'Thumbs point to ceiling',
+      'PEGADA PRONADA LARGA': 'WIDE PRONATED GRIP',
+      'Puxe BARRA em direção ao PEITO': 'Pull BAR toward CHEST',
+      'não atrás do pescoço': 'not behind neck',
+      'COTOVELOS BAIXOS': 'ELBOWS DOWN',
+      'INCLINE TRONCO 15° para TRÁS': 'LEAN TORSO BACK 15°',
+      'CONTRAIA DORSAIS': 'CONTRACT LATS',
+      'POLIA ALTA com CORDA': 'HIGH PULLEY with ROPE',
+      'Puxe em direção à TESTA': 'Pull toward FOREHEAD',
+      'ABRINDO COTOVELOS': 'OPENING ELBOWS',
+      'ROTAÇÃO EXTERNA': 'EXTERNAL ROTATION',
+      'FOQUE em DELTOIDE POSTERIOR': 'FOCUS on REAR DELTOID',
+      'TRAPÉZIO INFERIOR': 'LOWER TRAPEZIUS',
+      'Cotovelos colados no corpo': 'Elbows glued to body',
+      'Suba contraindo bíceps fortemente': 'Rise contracting biceps hard',
+      'desça controlando por 3 segundos': 'lower controlling for 3 seconds',
+      'Cotovelo apoiado na coxa': 'Elbow supported on thigh',
+      'Foque em pico de contração': 'Focus on peak contraction',
+      'Movimento lento e controlado': 'Slow and controlled movement',
+      'BARRA FIXA no CHÃO': 'BAR FIXED on GROUND',
+      'Pegue em direção ao PEITO': 'Pull toward CHEST',
+      'COTOVELOS ALTOS': 'ELBOWS HIGH',
+      'CONTRAIA MEIO DAS COSTAS': 'CONTRACT MID-BACK',
+      'Knees go forward': 'Knees go forward',
+      'hips back': 'hips back',
+      'Torso leans back': 'Torso leans back',
+      'Fully stretches rectus femoris': 'Fully stretches rectus femoris',
+      'Use support if needed': 'Use support if needed',
+      'Extreme quad isolation': 'Extreme quad isolation',
+      'Joelhos levemente flexionados': 'Knees slightly bent',
+      'desça barra rente às pernas': 'lower bar close to legs',
+      'Sinta alongar posterior': 'Feel hamstring stretch',
+      'Volta contraindo glúteos': 'Return contracting glutes',
+      'Barra nas costas': 'Bar on back',
+      'tronco a 45 graus': 'torso at 45 degrees',
+      'Desça quadril para trás': 'Lower hips back',
+      'Wide stride': 'Wide stride',
+      'Lower vertically': 'Lower vertically',
+      'Back knee almost touches floor': 'Back knee almost touches floor',
+      'Keep torso upright': 'Keep torso upright',
+      'core engaged': 'core engaged',
+      'Incline tronco 45°': 'Lean torso 45°',
+      'Braços estendidos': 'Arms extended',
+      'abra lateralmente': 'open laterally',
+      'Foque em CONTRAIR posterior de ombro': 'Focus on CONTRACTING rear shoulder',
+      'NÃO use trapézio': 'DO NOT use trapezius',
+      'Suba barra até ALTURA DOS OLHOS': 'Raise bar to EYE LEVEL',
+      'NÃO use impulso': 'DO NOT use momentum',
+      'Polegares para cima': 'Thumbs up',
+      'Não balance tronco': 'Do not swing torso',
+      'Contraia bíceps no topo': 'Contract biceps at top',
+      'Supino RETO com PEGADA FECHADA': 'FLAT Bench with CLOSE GRIP',
+      'DESCER até PEITO': 'LOWER to CHEST',
+      'COTOVELOS RENTOS ao corpo': 'ELBOWS CLOSE to body',
+      'EMPURRAR EXPLODINDO': 'PUSH EXPLODING',
+      'COMPOSTO PESADO para TRÍCEPS': 'HEAVY COMPOUND for TRICEPS',
+      'Mãos apoiadas em BANCO': 'Hands supported on BENCH',
+      'PÉS NO CHÃO': 'FEET ON FLOOR',
+      'iniciante': 'beginner',
+      'ou ESTICADOS': 'or STRETCHED',
+      'avançado': 'advanced',
+      'Desça QUADRIL PRÓXIMO ao chão': 'Lower HIPS CLOSE to floor',
+      'SUBA contraindo TRÍCEPS': 'RISE contracting TRICEPS',
+      'Pés mais afastados': 'Feet wider apart',
+      'pontas para fora': 'toes out',
+      'Desça até paralelo ou abaixo': 'Descend to parallel or below',
+      'Passada ampla': 'Wide step',
+      'desça joelho de trás': 'lower back knee',
+      'quase até tocar chão': 'almost to touch floor',
+      'Tronco ereto': 'Upright torso',
+      'Deitado': 'Lying down',
+      'puxe calcanhares': 'pull heels',
+      'em direção aos glúteos': 'toward glutes',
+      'Segure 1 segundo': 'Hold 1 second',
+      'contração máxima': 'maximum contraction',
+      'Movimento de quadril': 'Hip movement',
+      'não de braços': 'not arms',
+      'Estenda tudo no topo': 'Extend everything at top',
+      'Kettlebell flutua': 'Kettlebell floats',
+      'altura dos ombros': 'shoulder height',
+      'Use tornozelheira': 'Use ankle strap',
+      'Chute para trás': 'Kick backward',
+      'contraindo glúteo máximo': 'contracting glute maximus',
+      'Tronco estável': 'Stable torso',
+      'Banco 30-45°': 'Bench 30-45°',
+      'Foco em PEITORAL SUPERIOR': 'Focus on UPPER CHEST',
+      'Desça halteres': 'Lower dumbbells',
+      'até altura do peito': 'to chest height',
+      'Rotação externa no topo': 'External rotation at top',
+      'Mãos largura dos ombros': 'Hands shoulder width',
+      'Corpo RETO': 'Body STRAIGHT',
+      'prancha': 'plank',
+      'Desça até peito quase tocar chão': 'Lower until chest almost touches floor',
+      'Contraia glúteos e core': 'Contract glutes and core',
+      'PEGADA PRONADA': 'PRONATED GRIP',
+      'palmas para FRENTE': 'palms FORWARD',
+      'LARGURA DOS OMBROS': 'SHOULDER WIDTH',
+      'Puxe PEITO': 'Pull CHEST',
+      'em direção à BARRA': 'toward BAR',
+      'COTOVELOS para BAIXO': 'ELBOWS DOWN',
+      'e PARA TRÁS': 'and BACK',
+      'CONTRAIA DORSAIS no TOPO': 'CONTRACT LATS at TOP',
+      'Feet shoulder-width apart': 'Feet shoulder-width apart',
+      'on lower part of platform': 'on lower part of platform',
+      'Descend controlled to 90°': 'Descend controlled to 90°',
+      'no more': 'no more',
+      'Don\'t lock knees': 'Don\'t lock knees',
+      'at top': 'at top',
+      'to maintain constant tension': 'to maintain constant tension',
+      'Hold 1-2 seconds': 'Hold 1-2 seconds',
+      'peak': 'peak',
+      'Control descent for 3 seconds': 'Control descent for 3 seconds',
+      'slow eccentric': 'slow eccentric',
+      'Feet slightly out': 'Feet slightly out',
+      'activates VMO': 'activates VMO',
+      'vastus medialis': 'vastus medialis',
+      'Bar resting on front delts': 'Bar resting on front delts',
+      'hold with fingertips': 'hold with fingertips',
+      'Elbows high': 'Elbows high',
+      'Torso more upright': 'Torso more upright',
+      'than traditional squat': 'than traditional squat',
+      'Total focus on quads': 'Total focus on quads',
+      'Keep chest up': 'Keep chest up',
+      'descend to parallel or below': 'descend to parallel or below',
+      'full ROM': 'full range of motion',
+      'Knees aligned with toes': 'Knees aligned with toes',
+      'don\'t let them cave in': 'don\'t let them cave in',
+      'Push the floor away': 'Push the floor away',
+      'on the way up': 'on the way up',
+      'squeezing glutes': 'squeezing glutes',
+      'MAXIMUM range': 'MAXIMUM range',
+      'Lower heel': 'Lower heel',
+      'until you feel full stretch': 'until you feel full stretch',
+      'Rise contracting hard': 'Rise contracting hard',
+      'Parallel feet': 'Parallel feet',
+      'activate medial head': 'activate medial head',
+      'Focus on SOLEUS': 'Focus on SOLEUS',
+      'deep muscle': 'deep muscle',
+      'Knees at 90°': 'Knees at 90°',
+      'Pause 1s at bottom': 'Pause 1s at bottom',
+      'Activates type I endurance fibers': 'Activates type I endurance fibers',
+      'Feet on lower edge': 'Feet on lower edge',
+      'Push extending knees completely': 'Push extending knees completely',
+      'Hold contraction 2s': 'Hold contraction 2s',
+      'Full ROM': 'Full range of motion',
+      'Hold dumbbell on one side': 'Hold dumbbell on one side',
+      'Support other leg': 'Support other leg',
+      'Focus on maximum contraction': 'Focus on maximum contraction',
+      'Corrects asymmetries': 'Corrects asymmetries',
+      'Torso parallel to floor': 'Torso parallel to floor',
+      'support on bench': 'support on bench',
+      'Maximum stretch at bottom': 'Maximum stretch at bottom',
+      'Emphasizes medial/lateral gastrocnemius': 'Emphasizes medial/lateral gastrocnemius',
+      'Bar on traps': 'Bar on traps',
+      'Use wooden blocks': 'Use wooden blocks',
+      'under feet': 'under feet',
+      'to increase range': 'to increase range',
+      'Lower beyond line of feet': 'Lower beyond line of feet',
+      'Use arms for momentum': 'Use arms for momentum',
+      'Land softly': 'Land softly',
+      'with knees slightly bent': 'with knees slightly bent',
+      'Focus on maximum explosion': 'Focus on maximum explosion',
+      'Box 60-90cm': 'Box 60-90cm',
+      'Squat quickly': 'Squat quickly',
+      'and jump as far as possible': 'and jump as far as possible',
+      'Absorb impact': 'Absorb impact',
+      'Walk back to reset': 'Walk back to reset',
+      'Descend into squat': 'Descend into squat',
+      'and EXPLODE up jumping': 'and EXPLODE up jumping',
+      'Land softly and immediately': 'Land softly and immediately',
+      'start next rep': 'start next rep',
+      'Drop from box': 'Drop from box',
+      'land and IMMEDIATELY jump max': 'land and IMMEDIATELY jump max',
+      'Ground contact time': 'Ground contact time',
+      'should be minimal': 'should be minimal',
+      'Lift medicine ball above head': 'Lift medicine ball above head',
+      'and throw to floor': 'and throw to floor',
+      'with max force': 'with max force',
+      'Squat to pick up': 'Squat to pick up',
+      'and repeat': 'and repeat',
+      'Feet shoulder width': 'Feet shoulder width',
+      'Swing arms back': 'Swing arms back',
+      'and jump forward max': 'and jump forward max',
+      'Land with both feet': 'Land with both feet',
+      'simultaneously': 'simultaneously',
+    };
+    
+    let translated = tip;
+    Object.keys(translations).forEach(key => {
+      translated = translated.replace(new RegExp(key, 'gi'), translations[key]);
+    });
+    
+    return translated;
+  };
+
+  // Get title based on objective (in English)
   const getObjectiveTitle = () => {
     const categoria = anamneseData.categoria?.toLowerCase() || '';
     
     const titles: Record<string, string> = {
-      hipertrofia: 'DESAFIO HIPERTROFIA TOTAL',
-      emagrecimento: 'DESAFIO QUEIMA EXTREMA',
-      forca: 'DESAFIO FORÇA MÁXIMA',
-      resistencia: 'DESAFIO RESISTÊNCIA ELITE',
-      desafio_trincar_abdomen: 'DESAFIO ABDÔMEN TRINCADO',
-      evoluir_shape: 'DESAFIO EVOLUIÇÃO DE SHAPE'
+      hipertrofia: 'TOTAL HYPERTROPHY CHALLENGE',
+      emagrecimento: 'EXTREME FAT BURN CHALLENGE',
+      forca: 'MAXIMUM STRENGTH CHALLENGE',
+      resistencia: 'ELITE ENDURANCE CHALLENGE',
+      desafio_trincar_abdomen: 'RIPPED ABS CHALLENGE',
+      evoluir_shape: 'SHAPE EVOLUTION CHALLENGE'
     };
     
-    return titles[categoria] || 'DESAFIO TREINO COMPLETO';
+    return titles[categoria] || 'COMPLETE TRAINING CHALLENGE';
   };
 
   return (
@@ -362,48 +584,48 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
         <View style={styles.orangeAccent} />
         
         <View style={styles.badge}>
-          <Text style={styles.badgeText}>PROGRAMA DE 7 DIAS</Text>
+          <Text style={styles.badgeText}>7-DAY PROGRAM</Text>
         </View>
-        
+                
         <Text style={styles.title}>{getObjectiveTitle()}</Text>
-        <Text style={styles.subtitle}>Complete os 7 dias e repita até atingir seu objetivo</Text>
-        
+        <Text style={styles.subtitle}>Complete all 7 days and repeat until you reach your goal</Text>
+                
         <View style={styles.athleteBox}>
-          <Text style={{fontSize: 10, color: '#999999', textTransform: 'uppercase' as const, letterSpacing: 2, marginBottom: 6}}>ATLETA</Text>
-          <Text style={styles.athleteName}>{anamneseData.nome || 'Atleta'}</Text>
+          <Text style={{fontSize: 10, color: '#999999', textTransform: 'uppercase' as const, letterSpacing: 2, marginBottom: 6}}>ATHLETE</Text>
+          <Text style={styles.athleteName}>{anamneseData.nome || 'Athlete'}</Text>
         </View>
-        
+                
         <View style={styles.infoRow}>
           <View style={styles.infoItem}>
             <Text style={styles.infoValue}>{anamneseData.peso || 0}kg</Text>
-            <Text style={styles.infoLabel}>PESO</Text>
+            <Text style={styles.infoLabel}>WEIGHT</Text>
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoValue}>{anamneseData.altura || 0}cm</Text>
-            <Text style={styles.infoLabel}>ALTURA</Text>
+            <Text style={styles.infoLabel}>HEIGHT</Text>
           </View>
           <View style={styles.infoItem}>
             <Text style={styles.infoValue}>{calculateAge()}</Text>
-            <Text style={styles.infoLabel}>ANOS</Text>
+            <Text style={styles.infoLabel}>AGE</Text>
           </View>
         </View>
-        
+                
         <View style={styles.dotsRow}>
           {[...Array(7)].map((_, i) => (
             <View key={i} style={i === 0 ? styles.dotActive : styles.dot} />
           ))}
         </View>
-        
-        <Text style={styles.footerNote}>Foco total no seu objetivo: {anamneseData.categoria?.toUpperCase() || 'HIPERTROFIA'}</Text>
-        <Text style={{fontSize: 7, color: '#E5E5E5', textAlign: 'center' as const, marginTop: 4}}>Gerado em: {new Date().toLocaleString('pt-BR')}</Text>
+                
+        <Text style={styles.footerNote}>Total focus on your goal: {anamneseData.categoria?.toUpperCase() || 'HYPERTROPHY'}</Text>
+        <Text style={{fontSize: 7, color: '#E5E5E5', textAlign: 'center' as const, marginTop: 4}}>Generated on: {new Date().toLocaleString('en-US')}</Text>
       </Page>
 
       {/* TREINOS - Um por página */}
       {sevenDays.map((day, index) => (
         <Page key={`day-${index}`} size="A4" style={styles.page}>
           <View style={styles.workoutHeader}>
-            <Text style={styles.dayTitle}>DIA {index + 1}</Text>
-            <Text style={styles.dayLabel}>SEMANA ÚNICA • FOCO NO OBJETIVO</Text>
+            <Text style={styles.dayTitle}>DAY {index + 1}</Text>
+            <Text style={styles.dayLabel}>SINGLE WEEK • FOCUS ON GOAL</Text>
             <View style={styles.progressBar}>
               <View style={[styles.progressFill, { width: `${((index + 1) / 7) * 100}%` }]} />
             </View>
@@ -413,13 +635,13 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
             <View key={exIndex} style={styles.exerciseItem}>
               <View style={styles.exerciseHeader}>
                 <Text style={styles.exerciseNumber}>{String(exIndex + 1).padStart(2, '0')}</Text>
-                <Text style={styles.exerciseName}>{exercicio.nome || 'Exercício'}</Text>
+                <Text style={styles.exerciseName}>{exercicio.nome || 'Exercise'}</Text>
               </View>
               
               <View style={styles.exerciseDetails}>
                 <View style={styles.detailBox}>
                   <Text style={styles.detailValue}>{exercicio.series || '3'}</Text>
-                  <Text style={styles.detailLabel}>SÉRIES</Text>
+                  <Text style={styles.detailLabel}>SETS</Text>
                 </View>
                 <View style={styles.detailSeparator} />
                 <View style={styles.detailBox}>
@@ -429,80 +651,80 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
                 <View style={styles.detailSeparator} />
                 <View style={styles.detailBox}>
                   <Text style={styles.detailValue}>{exercicio.descanso || '60s'}</Text>
-                  <Text style={styles.detailLabel}>DESCANSO</Text>
+                  <Text style={styles.detailLabel}>REST</Text>
                 </View>
               </View>
               
               {exercicio.dicaExpert && (
                 <View style={styles.expertTip}>
-                  <Text style={{fontSize: 10, color: '#FF8C00', marginBottom: 4}}>💡 DICA PRO:</Text>
-                  <Text style={styles.expertTipText}>{exercicio.dicaExpert}</Text>
+                  <Text style={{fontSize: 10, color: '#FF8C00', marginBottom: 4}}>💡 PRO TIP:</Text>
+                  <Text style={styles.expertTipText}>{translateTip(exercicio.dicaExpert)}</Text>
                 </View>
               )}
             </View>
           ))}
           
-          <Text style={styles.footerNote}>Dia {index + 1} de 7 • Complete todos para ver resultados</Text>
+          <Text style={styles.footerNote}>Day {index + 1} of 7 • Complete all to see results</Text>
           <Text style={styles.pageNumber}>{index + 2}</Text>
         </Page>
       ))}
 
       {/* PÁGINA FINAL - Instruções */}
       <Page size="A4" style={styles.guidePage}>
-        <Text style={styles.guideTitle}>🎯 COMO USAR ESTE PROGRAMA</Text>
-        
+        <Text style={styles.guideTitle}>🎯 HOW TO USE THIS PROGRAM</Text>
+              
         <View style={styles.stepContainer}>
           <Text style={styles.stepNumber}>01</Text>
           <View style={styles.stepContent}>
-            <Text style={styles.stepTitle}>COMPLETE OS 7 DIAS</Text>
+            <Text style={styles.stepTitle}>COMPLETE ALL 7 DAYS</Text>
             <Text style={styles.stepDescription}>
-              Execute todos os 7 treinos em sequência. Descanse quando necessário, mas mantenha a consistência.
+              Perform all 7 workouts in sequence. Rest when needed, but stay consistent.
             </Text>
           </View>
         </View>
-        
+              
         <View style={styles.stepContainer}>
           <Text style={styles.stepNumber}>02</Text>
           <View style={styles.stepContent}>
-            <Text style={styles.stepTitle}>REPITA O CICLO</Text>
+            <Text style={styles.stepTitle}>REPEAT THE CYCLE</Text>
             <Text style={styles.stepDescription}>
-              Após completar os 7 dias, reinicie o programa. Cada ciclo traz mais resultados e evolução!
+              After completing the 7 days, restart the program. Each cycle brings more results and progress!
             </Text>
           </View>
         </View>
-        
+              
         <View style={styles.stepContainer}>
           <Text style={styles.stepNumber}>03</Text>
           <View style={styles.stepContent}>
-            <Text style={styles.stepTitle}>PROGRIDRA SEMPRE</Text>
+            <Text style={styles.stepTitle}>ALWAYS PROGRESS</Text>
             <Text style={styles.stepDescription}>
-              Aumente cargas, repetições ou intensidade a cada ciclo para continuar evoluindo constantemente.
+              Increase weights, reps, or intensity each cycle to keep evolving constantly.
             </Text>
           </View>
         </View>
-        
+              
         <View style={styles.infoBox}>
-          <Text style={styles.infoBoxTitle}>⏱️ TEMPO ESTIMADO</Text>
-          <Text style={styles.infoBoxText}>4-6 semanas para ver resultados significativos. Resultados variam conforme dedicação e consistência.</Text>
+          <Text style={styles.infoBoxTitle}>⏱️ ESTIMATED TIME</Text>
+          <Text style={styles.infoBoxText}>4-6 weeks to see significant results. Results vary based on dedication and consistency.</Text>
         </View>
-        
+              
         <View style={styles.infoBox}>
-          <Text style={styles.infoBoxTitle}>🎯 OBJETIVO FOCADO</Text>
+          <Text style={styles.infoBoxTitle}>🎯 FOCUSED GOAL</Text>
           <Text style={styles.infoBoxText}>
-            Todos os exercícios foram selecionados especificamente para: {anamneseData.categoria?.toUpperCase() || 'TREINO PERSONALIZADO'}. 
-            Este programa é 100% personalizado para seu objetivo.
+            All exercises were specifically selected for: {anamneseData.categoria?.toUpperCase() || 'CUSTOMIZED TRAINING'}. 
+            This program is 100% personalized to your goal.
           </Text>
         </View>
-        
+              
         {workoutPlan.notasSeguranca && workoutPlan.notasSeguranca.length > 0 && (
           <View style={styles.warningBox}>
-            <Text style={styles.warningTitle}>⚠️ ATENÇÃO</Text>
+            <Text style={styles.warningTitle}>⚠️ ATTENTION</Text>
             {workoutPlan.notasSeguranca.map((nota: string, index: number) => (
               <Text key={index} style={styles.warningText}>• {nota}</Text>
             ))}
           </View>
         )}
-        
+              
         <Text style={styles.pageNumber}>8</Text>
       </Page>
     </Document>

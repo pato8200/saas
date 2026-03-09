@@ -91,7 +91,15 @@ const DownloadButton = ({ treinoData, nomeUsuario }: DownloadButtonProps) => {
     setError(null);
     
     try {
+      console.log('📄 Generating PDF...');
+      console.log('📋 treinoData received:', {
+        weeks: treinoData.semanas?.length,
+        category: treinoData.periodizacao?.objetivo,
+        firstDayExercises: treinoData.semanas?.[0]?.divisaoSemanal?.[0]?.exercicios?.map((e: any) => e.nome).join(', ')
+      });
+      
       const anamneseReal = getRealAnamneseData();
+      console.log('👤 User data for PDF:', anamneseReal);
       
       // Create PDF document
       const doc = (
@@ -103,6 +111,8 @@ const DownloadButton = ({ treinoData, nomeUsuario }: DownloadButtonProps) => {
       
       // Generate PDF blob
       const blob = await pdf(doc).toBlob();
+      
+      console.log('✅ PDF generated successfully!');
       
       // Create download link
       const url = URL.createObjectURL(blob);
