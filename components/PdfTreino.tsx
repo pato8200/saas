@@ -576,6 +576,19 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
     return titles[categoria] || 'COMPLETE TRAINING CHALLENGE';
   };
 
+  // Translate category from Portuguese to English for display
+  const translateCategory = (categoria: string): string => {
+    const translations: Record<string, string> = {
+      'hipertrofia': 'HYPERTROPHY',
+      'emagrecimento': 'FAT BURN',
+      'forca': 'STRENGTH',
+      'resistencia': 'ENDURANCE',
+      'desafio_trincar_abdomen': 'ABS CHALLENGE',
+      'evoluir_shape': 'SHAPE EVOLUTION'
+    };
+    return translations[categoria] || 'CUSTOMIZED TRAINING';
+  };
+
   return (
     <Document>
       {/* CAPA */}
@@ -616,7 +629,7 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
           ))}
         </View>
                 
-        <Text style={styles.footerNote}>Total focus on your goal: {anamneseData.categoria?.toUpperCase() || 'HYPERTROPHY'}</Text>
+        <Text style={styles.footerNote}>Total focus on your goal: {translateCategory(anamneseData.categoria || 'hipertrofia')}</Text>
         <Text style={{fontSize: 7, color: '#E5E5E5', textAlign: 'center' as const, marginTop: 4}}>Generated on: {new Date().toLocaleString('en-US')}</Text>
       </Page>
 
@@ -711,7 +724,7 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
         <View style={styles.infoBox}>
           <Text style={styles.infoBoxTitle}>🎯 FOCUSED GOAL</Text>
           <Text style={styles.infoBoxText}>
-            All exercises were specifically selected for: {anamneseData.categoria?.toUpperCase() || 'CUSTOMIZED TRAINING'}. 
+            All exercises were specifically selected for: {translateCategory(anamneseData.categoria || 'hipertrofia')}. 
             This program is 100% personalized to your goal.
           </Text>
         </View>

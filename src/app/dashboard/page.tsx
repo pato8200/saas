@@ -175,8 +175,14 @@ const DashboardPage = () => {
                 </div>
               </div>
 
-              {/* Single Download Button */}
-              <DownloadButton treinoData={workoutPlan} nomeUsuario={userData?.nome || 'Athlete'} />
+              {/* Single Download Button - NOW PASSES ANAMNESE DATA DIRECTLY */}
+              {userData && workoutPlan && (
+                <DownloadButton 
+                  treinoData={workoutPlan} 
+                  anamneseData={userData} 
+                  nomeUsuario={userData.nome || 'Athlete'} 
+                />
+              )}
               
               <p className="mt-4 text-gray-600 text-sm text-center">Your complete 7-day workout in premium format</p>
 

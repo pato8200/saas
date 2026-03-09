@@ -3,14 +3,15 @@
 import { useState, useEffect } from 'react';
 import { pdf } from '@react-pdf/renderer';
 import PdfTreino from './PdfTreino';
-import { TreinoData } from '../types/anamnese';
+import { TreinoData, AnamneseFormData } from '../types/anamnese';
 
 interface DownloadButtonProps {
   treinoData: TreinoData;
+  anamneseData: AnamneseFormData; // NOW RECEIVES DATA DIRECTLY FROM DASHBOARD
   nomeUsuario: string;
 }
 
-const DownloadButton = ({ treinoData, nomeUsuario }: DownloadButtonProps) => {
+const DownloadButton = ({ treinoData, anamneseData, nomeUsuario }: DownloadButtonProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -98,14 +99,28 @@ const DownloadButton = ({ treinoData, nomeUsuario }: DownloadButtonProps) => {
         firstDayExercises: treinoData.semanas?.[0]?.divisaoSemanal?.[0]?.exercicios?.map((e: any) => e.nome).join(', ')
       });
       
-      const anamneseReal = getRealAnamneseData();
-      console.log('👤 User data for PDF:', anamneseReal);
+      // CRITICAL FIX: Use anamneseData passed from dashboard directly (guarantees correct data)
+      // Instead of reading from localStorage which might have stale data
+      const pdfData = {
+        nome: anamneseData.nome || nomeUsuario,
+        dataNascimento: anamneseData.dataNascimento || '1998-01-01',
+        idade: anamneseData.idade || 25,
+        peso: parseFloat(String(anamneseData.peso)) || 70,
+        altura: parseFloat(String(anamneseData.altura)) || 175,
+        categoria: anamneseData.categoria || 'hipertrofia',
+        objetivo: anamneseData.objetivo || anamneseData.categoria,
+        nivel: anamneseData.nivel || 'intermediario',
+        localTreino: anamneseData.localTreino || 'academia',
+        lesao: anamneseData.lesao || '',
+      };
+      
+      console.log('👤 User data for PDF (from dashboard):', pdfData);
       
       // Create PDF document
       const doc = (
         <PdfTreino 
           workoutPlan={treinoData} 
-          anamneseData={anamneseReal} 
+          anamneseData={pdfData} 
         />
       );
       
@@ -176,7 +191,7 @@ const DownloadButton = ({ treinoData, nomeUsuario }: DownloadButtonProps) => {
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
             </svg>
-            📄 Baixar PDF com 12 Semanas de Treino
+            📄 Download 7-Day Workout PDF
           </>
         )}
       </button>

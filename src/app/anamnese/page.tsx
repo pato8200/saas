@@ -323,7 +323,7 @@ const AnamnesePage = () => {
                   Available Equipment (check all that you have access to)
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  {['Barras', 'Halteres', 'Elásticos', 'Kettlebell', 'Esteira', 'Bicicleta', 'Barra Fixa', 'Tapete', 'Bola Suíça', 'Caixa/Pliométrico', 'Bola Medicinal', 'Sem equipamento'].map((equip) => (
+                  {['Bars', 'Dumbbells', 'Resistance Bands', 'Kettlebell', 'Treadmill', 'Bike', 'Pull-up Bar', 'Mat', 'Swiss Ball', 'Plyo Box', 'Medicine Ball', 'No Equipment'].map((equip) => (
                     <label key={equip} className="flex items-center">
                       <input
                         type="checkbox"
