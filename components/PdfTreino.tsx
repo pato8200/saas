@@ -812,8 +812,18 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
                 </View>
                 <View style={styles.detailSeparator} />
                 <View style={styles.detailBox}>
-                  <Text style={styles.detailValue}>{exercicio.repeticoes || '12'}</Text>
-                  <Text style={styles.detailLabel}>REPS</Text>
+                  {/* Special case for Plank - show seconds instead of reps */}
+                  {translateExerciseName(exercicio.nome) === 'Plank' ? (
+                    <>
+                      <Text style={styles.detailValue}>{exercicio.tempo || '30s'}</Text>
+                      <Text style={styles.detailLabel}>TIME</Text>
+                    </>
+                  ) : (
+                    <>
+                      <Text style={styles.detailValue}>{exercicio.repeticoes || '12'}</Text>
+                      <Text style={styles.detailLabel}>REPS</Text>
+                    </>
+                  )}
                 </View>
                 <View style={styles.detailSeparator} />
                 <View style={styles.detailBox}>

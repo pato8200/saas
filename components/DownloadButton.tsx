@@ -133,7 +133,7 @@ const DownloadButton = ({ treinoData, anamneseData, nomeUsuario }: DownloadButto
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'plano-de-treino-completo.pdf';
+      link.download = 'PERSONALIZED-WORKOUT-PLAN.pdf';
       link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
