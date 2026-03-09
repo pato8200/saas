@@ -6,10 +6,23 @@ export async function POST(req: NextRequest) {
   try {
     const body: AnamneseFormData = await req.json();
     
-    // Validar campos obrigatórios
-    if (!body.nome || !body.peso || !body.altura || !body.categoria) {
+    console.log('📥 Received form data:', JSON.stringify(body, null, 2));
+    
+    // Validate required fields with better error messages
+    const missingFields = [];
+    if (!body.nome) missingFields.push('nome');
+    if (!body.peso) missingFields.push('peso');
+    if (!body.altura) missingFields.push('altura');
+    if (!body.categoria) missingFields.push('categoria');
+    
+    if (missingFields.length > 0) {
+      console.error('❌ Missing required fields:', missingFields);
       return NextResponse.json(
-        { error: 'Campos obrigatórios ausentes' },
+        { 
+          error: 'Missing required fields',
+          missingFields,
+          receivedData: body
+        },
         { status: 400 }
       );
     }
@@ -26,9 +39,16 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true, treino });
   } catch (error) {
-    console.error('Erro ao gerar treino:', error);
+    console.error('❌ Error generating workout:', error);
+    console.error('Error details:', error instanceof Error ? error.message : 'Unknown error');
+    console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');
+    
     return NextResponse.json(
-      { error: 'Erro ao gerar plano de treino: ' + (error instanceof Error ? error.message : 'Unknown error') },
+      { 
+        error: 'Failed to generate workout plan',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        details: 'Check server logs for more information'
+      },
       { status: 500 }
     );
   }
