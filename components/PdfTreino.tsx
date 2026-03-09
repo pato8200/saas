@@ -332,72 +332,72 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
   const translateTip = (tip: string): string => {
     const translations: Record<string, string> = {
       // Core/Abs exercises
-      'Contraia glúteos e abdômen fortemente': 'Contract glutes and abs hard',
-      'Não deixe quadril cair ou subir demais': "Don't let hips drop or rise too much",
+      'Contraia gluteos e abdomen fortemente': 'Contract glutes and abs hard',
+      'Nao deixe quadril cair ou subir demais': "Don't let hips drop or rise too much",
       'Lying down, levante pernas e tronco formando V': 'Lying down, lift legs and torso forming V',
-      'Segure haltere se necessário': 'Hold dumbbell if needed',
+      'Segure haltere se necessario': 'Hold dumbbell if needed',
       'Lying down, pernas estendidas': 'Lying down, legs extended',
-      'Eleve até 90° sem descolar lombar do chão': 'Lift to 90° without lifting lower back from floor',
-      'Desça lentamente': 'Lower slowly',
-      'Lying down, joelhos 90°': 'Lying down, knees at 90°',
-      'Eleve quadril do chão usando abdominal inferior': 'Lift hips from floor using lower abs',
+      'Eleve ate 90 sem descolar lombar do chao': 'Lift to 90 without lifting lower back from floor',
+      'Desca lentamente': 'Lower slowly',
+      'Lying down, joelhos 90': 'Lying down, knees at 90',
+      'Eleve quadril do chao usando abdominal inferior': 'Lift hips from floor using lower abs',
       'Control the descent': 'Control the descent',
-      'Lying down, abra braços e pernas formando X': 'Lying down, open arms and legs forming X',
-      'Feche trazendo mãos aos pés contraindo abdômen': 'Close bringing hands to feet contracting abs',
-      'Posição de plank': 'Plank position',
-      'traga joelhos alternadamente em direção ao peito': 'bring knees alternately toward chest',
-      'Rápido e controlado': 'Fast and controlled',
+      'Lying down, abra bracos e pernas formando X': 'Lying down, open arms and legs forming X',
+      'Feche trazendo maos aos pes contraindo abdomen': 'Close bringing hands to feet contracting abs',
+      'Posicao de plank': 'Plank position',
+      'traga joelhos alternadamente em direcao ao peito': 'bring knees alternately toward chest',
+      'Rapido e controlado': 'Fast and controlled',
       'Lying down, joelhos flexionados': 'Lying down, knees bent',
-      'Eleve tronco contraindo abdômen superior': 'Lift torso contracting upper abs',
+      'Eleve tronco contraindo abdomen superior': 'Lift torso contracting upper abs',
       'Segure 1s no topo': 'Hold 1s at top',
       'Pendurado na barra': 'Hanging from bar',
-      'suba joelhos em direção ao peito': 'lift knees toward chest',
-      'Não balance o corpo': "Don't swing body",
+      'suba joelhos em direcao ao peito': 'lift knees toward chest',
+      'Nao balance o corpo': "Don't swing body",
       'Lying down, levante pernas e tronco simultaneamente': 'Lying down, lift legs and torso simultaneously',
-      'tentando tocar os pés': 'trying to touch feet',
-      'Pés elevados': 'Feet elevated',
-      'gire tronco tocando chão cada lado': 'rotate torso touching floor each side',
-      'Olhe sempre para as mãos durante movimento': 'Always look at hands during movement',
-      'Posição de plank, corra trazendo joelhos ao peito': 'Plank position, run bringing knees to chest',
-      'Core contraído': 'Core engaged',
-      'Lying down, levante pernas e ombros do chão': 'Lying down, lift legs and shoulders off floor',
-      'Lombar pressionada no chão': 'Lower back pressed to floor',
-      'Posição de banana': 'Banana position',
-      'Estenda braço e perna opostos simultaneamente': 'Extend opposite arm and leg simultaneously',
+      'tentando tocar os pes': 'trying to touch feet',
+      'Pes elevados': 'Feet elevated',
+      'gire tronco tocando chao cada lado': 'rotate torso touching floor each side',
+      'Olhe sempre para as maos durante movimento': 'Always look at hands during movement',
+      'Posicao de plank, corra trazendo joelhos ao peito': 'Plank position, run bringing knees to chest',
+      'Core contraido': 'Core engaged',
+      'Lying down, levante pernas e ombros do chao': 'Lying down, lift legs and shoulders off floor',
+      'Lombar pressionada no chao': 'Lower back pressed to floor',
+      'Posicao de banana': 'Banana position',
+      'Estenda braco e perna opostos simultaneamente': 'Extend opposite arm and leg simultaneously',
       'com controle': 'with control',
-      'Posição de plank alta': 'High plank position',
+      'Posicao de plank alta': 'High plank position',
       'toque ombro oposto alternadamente': 'touch opposite shoulder alternately',
-      'Mantenha quadril estável': 'Keep hips stable',
-      'Apoie antebraço e lateral do pé': 'Support forearm and side of foot',
+      'Mantenha quadril estavel': 'Keep hips stable',
+      'Apoie antebraco e lateral do pe': 'Support forearm and side of foot',
       'Quadril alto': 'Hips high',
       'corpo alinhado': 'body aligned',
-      'Foque em oblíquos': 'Focus on obliques',
+      'Foque em obliquos': 'Focus on obliques',
       'Sentado': 'Sitting',
-      'Lean torso 45°': 'Lean torso 45°',
+      'Lean torso 45': 'Lean torso 45',
       'Gire medicine ball ou haltere': 'Rotate medicine ball or dumbbell',
       'de um lado para outro': 'from side to side',
-      'Pés abrem e fecham': 'Feet open and close',
-      'braços sobem e descem': 'arms go up and down',
+      'Pes abrem e fecham': 'Feet open and close',
+      'bracos sobem e descem': 'arms go up and down',
       'Ritmo constante': 'Constant rhythm',
-      'respiração controlada': 'controlled breathing',
-      'não atrás do pescoço': 'not behind neck',
+      'respiracao controlada': 'controlled breathing',
+      'nao atras do pescoco': 'not behind neck',
       'COTOVELOS BAIXOS': 'ELBOWS DOWN',
-      'INCLINE TRONCO 15° para TRÁS': 'LEAN TORSO BACK 15°',
+      'INCLINE TRONCO 15 para TRAS': 'LEAN TORSO BACK 15',
       'CONTRAIA DORSAIS': 'CONTRACT LATS',
       'POLIA ALTA com CORDA': 'HIGH PULLEY with ROPE',
-      'Puxe em direção à TESTA': 'Pull toward FOREHEAD',
+      'Puxe em direcao a TESTA': 'Pull toward FOREHEAD',
       'ABRINDO COTOVELOS': 'OPENING ELBOWS',
-      'ROTAÇÃO EXTERNA': 'EXTERNAL ROTATION',
+      'ROTACAO EXTERNA': 'EXTERNAL ROTATION',
       'FOQUE em DELTOIDE POSTERIOR': 'FOCUS on REAR DELTOID',
-      'TRAPÉZIO INFERIOR': 'LOWER TRAPEZIUS',
+      'TRAPEZIO INFERIOR': 'LOWER TRAPEZIUS',
       'Cotovelos colados no corpo': 'Elbows glued to body',
-      'Suba contraindo bíceps fortemente': 'Rise contracting biceps hard',
-      'desça controlando por 3 segundos': 'lower controlling for 3 seconds',
+      'Suba contraindo biceps fortemente': 'Rise contracting biceps hard',
+      'desca controlando por 3 segundos': 'lower controlling for 3 seconds',
       'Cotovelo apoiado na coxa': 'Elbow supported on thigh',
-      'Foque em pico de contração': 'Focus on peak contraction',
+      'Foque em pico de contracao': 'Focus on peak contraction',
       'Movimento lento e controlado': 'Slow and controlled movement',
-      'BARRA FIXA no CHÃO': 'BAR FIXED on GROUND',
-      'Pegue em direção ao PEITO': 'Pull toward CHEST',
+      'BARRA FIXA no CHAO': 'BAR FIXED on GROUND',
+      'Pegue em direcao ao PEITO': 'Pull toward CHEST',
       'COTOVELOS ALTOS': 'ELBOWS HIGH',
       'CONTRAIA MEIO DAS COSTAS': 'CONTRACT MID-BACK',
       'Knees go forward': 'Knees go forward',
@@ -407,81 +407,81 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
       'Use support if needed': 'Use support if needed',
       'Extreme quad isolation': 'Extreme quad isolation',
       'Joelhos levemente flexionados': 'Knees slightly bent',
-      'desça barra rente às pernas': 'lower bar close to legs',
+      'desca barra rente as pernas': 'lower bar close to legs',
       'Sinta alongar posterior': 'Feel hamstring stretch',
-      'Volta contraindo glúteos': 'Return contracting glutes',
+      'Volta contraindo gluteos': 'Return contracting glutes',
       'Barra nas costas': 'Bar on back',
       'tronco a 45 graus': 'torso at 45 degrees',
-      'Desça quadril para trás': 'Lower hips back',
+      'Desca quadril para tras': 'Lower hips back',
       'Wide stride': 'Wide stride',
       'Lower vertically': 'Lower vertically',
       'Back knee almost touches floor': 'Back knee almost touches floor',
       'Keep torso upright': 'Keep torso upright',
       'core engaged': 'core engaged',
-      'Incline tronco 45°': 'Lean torso 45°',
-      'Braços estendidos': 'Arms extended',
+      'Incline tronco 45': 'Lean torso 45',
+      'Bracos estendidos': 'Arms extended',
       'abra lateralmente': 'open laterally',
       'Foque em CONTRAIR posterior de ombro': 'Focus on CONTRACTING rear shoulder',
-      'NÃO use trapézio': 'DO NOT use trapezius',
-      'Suba barra até ALTURA DOS OLHOS': 'Raise bar to EYE LEVEL',
-      'NÃO use impulso': 'DO NOT use momentum',
+      'NAO use trapezio': 'DO NOT use trapezius',
+      'Suba barra ate ALTURA DOS OLHOS': 'Raise bar to EYE LEVEL',
+      'NAO use impulso': 'DO NOT use momentum',
       'Polegares para cima': 'Thumbs up',
-      'Não balance tronco': 'Do not swing torso',
-      'Contraia bíceps no topo': 'Contract biceps at top',
+      'Nao balance tronco': 'Do not swing torso',
+      'Contraia biceps no topo': 'Contract biceps at top',
       'Supino RETO com PEGADA FECHADA': 'FLAT Bench with CLOSE GRIP',
-      'DESCER até PEITO': 'LOWER to CHEST',
+      'DESCER ate PEITO': 'LOWER to CHEST',
       'COTOVELOS RENTOS ao corpo': 'ELBOWS CLOSE to body',
       'EMPURRAR EXPLODINDO': 'PUSH EXPLODING',
-      'COMPOSTO PESADO para TRÍCEPS': 'HEAVY COMPOUND for TRICEPS',
-      'Mãos apoiadas em BANCO': 'Hands supported on BENCH',
-      'PÉS NO CHÃO': 'FEET ON FLOOR',
+      'COMPOSTO PESADO para TRICEPS': 'HEAVY COMPOUND for TRICEPS',
+      'Maos apoiadas em BANCO': 'Hands supported on BENCH',
+      'PES NO CHAO': 'FEET ON FLOOR',
       'iniciante': 'beginner',
       'ou ESTICADOS': 'or STRETCHED',
-      'avançado': 'advanced',
-      'Desça QUADRIL PRÓXIMO ao chão': 'Lower HIPS CLOSE to floor',
-      'SUBA contraindo TRÍCEPS': 'RISE contracting TRICEPS',
-      'Pés mais afastados': 'Feet wider apart',
+      'avancado': 'advanced',
+      'Desca QUADRIL PROXIMO ao chao': 'Lower HIPS CLOSE to floor',
+      'SUBA contraindo TRICEPS': 'RISE contracting TRICEPS',
+      'Pes mais afastados': 'Feet wider apart',
       'pontas para fora': 'toes out',
-      'Desça até paralelo ou abaixo': 'Descend to parallel or below',
+      'Desca ate paralelo ou abaixo': 'Descend to parallel or below',
       'Passada ampla': 'Wide step',
-      'desça joelho de trás': 'lower back knee',
-      'quase até tocar chão': 'almost to touch floor',
+      'desca joelho de tras': 'lower back knee',
+      'quase ate tocar chao': 'almost to touch floor',
       'Tronco ereto': 'Upright torso',
       'Deitado': 'Lying down',
       'puxe calcanhares': 'pull heels',
-      'em direção aos glúteos': 'toward glutes',
+      'em direcao aos gluteos': 'toward glutes',
       'Segure 1 segundo': 'Hold 1 second',
-      'contração máxima': 'maximum contraction',
+      'contracao maxima': 'maximum contraction',
       'Movimento de quadril': 'Hip movement',
-      'não de braços': 'not arms',
+      'nao de bracos': 'not arms',
       'Estenda tudo no topo': 'Extend everything at top',
       'Kettlebell flutua': 'Kettlebell floats',
       'altura dos ombros': 'shoulder height',
       'Use tornozelheira': 'Use ankle strap',
-      'Chute para trás': 'Kick backward',
-      'contraindo glúteo máximo': 'contracting glute maximus',
-      'Tronco estável': 'Stable torso',
-      'Banco 30-45°': 'Bench 30-45°',
+      'Chute para tras': 'Kick backward',
+      'contraindo gluteo maximo': 'contracting glute maximus',
+      'Tronco estavel': 'Stable torso',
+      'Banco 30-45': 'Bench 30-45',
       'Foco em PEITORAL SUPERIOR': 'Focus on UPPER CHEST',
-      'Desça halteres': 'Lower dumbbells',
-      'até altura do peito': 'to chest height',
-      'Rotação externa no topo': 'External rotation at top',
-      'Mãos largura dos ombros': 'Hands shoulder width',
+      'Desca halteres': 'Lower dumbbells',
+      'ate altura do peito': 'to chest height',
+      'Rotacao externa no topo': 'External rotation at top',
+      'Maos largura dos ombros': 'Hands shoulder width',
       'Corpo RETO': 'Body STRAIGHT',
       'prancha': 'plank',
-      'Desça até peito quase tocar chão': 'Lower until chest almost touches floor',
-      'Contraia glúteos e core': 'Contract glutes and core',
+      'Desca ate peito quase tocar chao': 'Lower until chest almost touches floor',
+      'Contraia gluteos e core': 'Contract glutes and core',
       'PEGADA PRONADA': 'PRONATED GRIP',
       'palmas para FRENTE': 'palms FORWARD',
       'LARGURA DOS OMBROS': 'SHOULDER WIDTH',
       'Puxe PEITO': 'Pull CHEST',
-      'em direção à BARRA': 'toward BAR',
+      'em direcao a BARRA': 'toward BAR',
       'COTOVELOS para BAIXO': 'ELBOWS DOWN',
-      'e PARA TRÁS': 'and BACK',
+      'e PARA TRAS': 'and BACK',
       'CONTRAIA DORSAIS no TOPO': 'CONTRACT LATS at TOP',
       'Feet shoulder-width apart': 'Feet shoulder-width apart',
       'on lower part of platform': 'on lower part of platform',
-      'Descend controlled to 90°': 'Descend controlled to 90°',
+      'Descend controlled to 90': 'Descend controlled to 90',
       'no more': 'no more',
       'Don\'t lock knees': 'Don\'t lock knees',
       'at top': 'at top',
@@ -515,7 +515,7 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
       'activate medial head': 'activate medial head',
       'Focus on SOLEUS': 'Focus on SOLEUS',
       'deep muscle': 'deep muscle',
-      'Knees at 90°': 'Knees at 90°',
+      'Knees at 90': 'Knees at 90',
       'Pause 1s at bottom': 'Pause 1s at bottom',
       'Activates type I endurance fibers': 'Activates type I endurance fibers',
       'Feet on lower edge': 'Feet on lower edge',
@@ -712,18 +712,7 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
 
   // Get title based on objective (in English)
   const getObjectiveTitle = () => {
-    const categoria = anamneseData.categoria?.toLowerCase() || '';
-    
-    const titles: Record<string, string> = {
-      hipertrofia: 'TOTAL HYPERTROPHY CHALLENGE',
-      emagrecimento: 'EXTREME FAT BURN CHALLENGE',
-      forca: 'MAXIMUM STRENGTH CHALLENGE',
-      resistencia: 'ELITE ENDURANCE CHALLENGE',
-      desafio_trincar_abdomen: 'RIPPED ABS CHALLENGE',
-      evoluir_shape: 'SHAPE EVOLUTION CHALLENGE'
-    };
-    
-    return titles[categoria] || 'COMPLETE TRAINING CHALLENGE';
+    return 'PERSONALIZED WORKOUT PLAN';
   };
 
   // Translate category from Portuguese to English for display
@@ -835,7 +824,7 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
               
               {exercicio.dicaExpert && (
                 <View style={styles.expertTip}>
-                  <Text style={{fontSize: 10, color: '#FF8C00', marginBottom: 4}}>💡 PRO TIP:</Text>
+                  <Text style={{fontSize: 10, color: '#FF8C00', marginBottom: 4}}>PRO TIP:</Text>
                   <Text style={styles.expertTipText}>{translateTip(exercicio.dicaExpert)}</Text>
                 </View>
               )}
@@ -849,7 +838,7 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
 
       {/* PÁGINA FINAL - Instruções */}
       <Page size="A4" style={styles.guidePage}>
-        <Text style={styles.guideTitle}>🎯 HOW TO USE THIS PROGRAM</Text>
+        <Text style={styles.guideTitle}>HOW TO USE THIS PROGRAM</Text>
               
         <View style={styles.stepContainer}>
           <Text style={styles.stepNumber}>01</Text>
@@ -882,12 +871,12 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
         </View>
               
         <View style={styles.infoBox}>
-          <Text style={styles.infoBoxTitle}>⏱️ ESTIMATED TIME</Text>
+          <Text style={styles.infoBoxTitle}>ESTIMATED TIME</Text>
           <Text style={styles.infoBoxText}>4-6 weeks to see significant results. Results vary based on dedication and consistency.</Text>
         </View>
               
         <View style={styles.infoBox}>
-          <Text style={styles.infoBoxTitle}>🎯 FOCUSED GOAL</Text>
+          <Text style={styles.infoBoxTitle}>FOCUSED GOAL</Text>
           <Text style={styles.infoBoxText}>
             All exercises were specifically selected for: {translateCategory(anamneseData.categoria || 'hipertrofia')}. 
             This program is 100% personalized to your goal.
@@ -896,15 +885,15 @@ const PdfTreino: React.FC<PdfTreinoProps> = ({ workoutPlan, anamneseData }) => {
               
         {workoutPlan.notasSeguranca && workoutPlan.notasSeguranca.length > 0 && (
           <View style={styles.warningBox}>
-            <Text style={styles.warningTitle}>⚠️ ATTENTION</Text>
+            <Text style={styles.warningTitle}>ATTENTION</Text>
             {workoutPlan.notasSeguranca.map((nota: string, index: number) => {
               // Translate safety notes from Portuguese to English
               const translations: Record<string, string> = {
-                'Hidrate-se adequadamente antes, durante e após o treino': 'Hydrate adequately before, during and after training',
-                'Respeite os dias de descanso para recuperação muscular': 'Respect rest days for muscle recovery',
-                'Durma 7-9 horas por noite para resultados ótimos': 'Sleep 7-9 hours per night for optimal results',
+                'Hidrate-se adequadamente antes, durante e apos o treino': 'Hydrate adequately before, during and after training',
+                'Respeite os dias de descanso para recuperacao muscular': 'Respect rest days for muscle recovery',
+                'Durma 7-9 horas por noite para resultados otimos': 'Sleep 7-9 hours per night for optimal results',
                 'Alimente seu corpo adequadamente de acordo com seus objetivos': 'Fuel your body properly according to your goals',
-                'Consulte um médico antes de iniciar qualquer programa de exercícios': 'Consult a physician before starting any exercise program'
+                'Consulte um medico antes de iniciar qualquer programa de exercicios': 'Consult a physician before starting any exercise program'
               };
               const translatedNote = translations[nota] || nota;
               return <Text key={index} style={styles.warningText}>• {translatedNote}</Text>;
