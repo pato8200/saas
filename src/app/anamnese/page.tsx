@@ -49,8 +49,8 @@ const AnamnesePage = () => {
       'weight_loss': 'emagrecimento',
       'strength': 'forca',
       'endurance': 'resistencia',
-      'abs_challenge': 'saude',
-      'shape_evolution': 'saude'
+      'abs_challenge': 'desafio_trincar_abdomen', // FIXED: Now maps to correct Portuguese category
+      'shape_evolution': 'evoluir_shape'
     };
     
     const formDataComNivel = {
@@ -59,7 +59,8 @@ const AnamnesePage = () => {
       idade: parseInt(String(formData.idade)) || 25,
       peso: parseFloat(String(formData.peso)) || 70,
       altura: parseFloat(String(formData.altura)) || 170,
-      objetivo: objetivoMap[formData.categoria] || 'hipertrofia',
+      categoria: formData.categoria || 'hypertrophy', // Keep original category
+      objetivo: objetivoMap[formData.categoria] || 'hipertrofia', // Map to Portuguese
       nivel: formData.nivel || 'intermediario',
       localTreino: formData.localTreino || 'academia'
     };

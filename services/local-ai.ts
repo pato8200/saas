@@ -270,13 +270,27 @@ const WEEKLY_FOCUS = {
 
 export function gerarTreinoLocal(formData: AnamneseFormData): TreinoData {
   console.log('🧠 Generating workout with LOCAL AI (no API needed!)');
-  console.log('👤 Athlete:', formData.nome, '| Category:', formData.categoria, '| Level:', formData.nivel);
+  
+  // CRITICAL FIX: Map English categories from form to Portuguese categories used in templates
+  const categoryMap: Record<string, string> = {
+    'hypertrophy': 'hipertrofia',
+    'weight_loss': 'emagrecimento',
+    'strength': 'forca',
+    'endurance': 'resistencia',
+    'abs_challenge': 'desafio_trincar_abdomen',
+    'shape_evolution': 'evoluir_shape'
+  };
+  
+  // Map from English (form) to Portuguese (templates)
+  let categoriaPortugues = categoryMap[formData.categoria] || formData.categoria || 'hipertrofia';
+  
+  console.log('👤 Athlete:', formData.nome, '| Input Category:', formData.categoria, '| Mapped Category:', categoriaPortugues, '| Level:', formData.nivel);
   
   const semanas: any[] = [];
   
   // For abdomen challenge: generate ONLY 1 week (7 days)
   // For other objectives: generate 12 weeks
-  const isAbdomenChallenge = formData.categoria === 'desafio_trincar_abdomen';
+  const isAbdomenChallenge = categoriaPortugues === 'desafio_trincar_abdomen';
   const numSemanas = isAbdomenChallenge ? 1 : 12;
   
   console.log('📊 IS ABDOMEN CHALLENGE?', isAbdomenChallenge, '| Weeks to generate:', numSemanas);
@@ -286,7 +300,7 @@ export function gerarTreinoLocal(formData: AnamneseFormData): TreinoData {
   const timestampSeed = Date.now();
   
   for (let semanaNum = 1; semanaNum <= numSemanas; semanaNum++) {
-    const divisaoSemanal = gerarSemana(formData, semanaNum, timestampSeed);
+    const divisaoSemanal = gerarSemana(formData, semanaNum, timestampSeed, categoriaPortugues);
     
     console.log('📋 Week', semanaNum, '- Days generated:', divisaoSemanal.length);
     console.log('📋 Day 1 exercises:', divisaoSemanal[0]?.exercicios?.map((e: any) => e.nome).join(', '));
@@ -303,7 +317,7 @@ export function gerarTreinoLocal(formData: AnamneseFormData): TreinoData {
     guiaExecucao: gerarGuiaExecucao(formData),
     notasSeguranca: gerarNotasSeguranca(formData),
     periodizacao: {
-      objetivo: formData.categoria,
+      objetivo: categoriaPortugues,
       duracao: isAbdomenChallenge ? '7 dias (Desafio)' : '12 semanas',
       fases: isAbdomenChallenge 
         ? ["Desafio de 7 dias - Repita até atingir seu objetivo"]
@@ -325,13 +339,14 @@ export function gerarTreinoLocal(formData: AnamneseFormData): TreinoData {
   return treinoData;
 }
 
-function gerarSemana(formData: AnamneseFormData, semanaNum: number, timestampSeed?: number) {
-  const categoria = formData.categoria as keyof typeof WORKOUT_SPLITS;
+function gerarSemana(formData: AnamneseFormData, semanaNum: number, timestampSeed?: number, categoriaForcada?: string) {
+  // Use forced category if provided (from mapped value), otherwise use formData.categoria
+  const categoria = (categoriaForcada || formData.categoria) as keyof typeof WORKOUT_SPLITS;
   let split = WORKOUT_SPLITS[categoria];
   
   console.log('📋 Generating week', semanaNum, '| Category:', categoria, '| Split exists?', !!split);
   
-  // CRITICAL FIX: If category not found, log error and use abdomen challenge as default
+  // CRITICAL FIX: If category not found, log error and use hipertrofia as default
   if (!split) {
     console.error('❌ Category', categoria, 'NOT FOUND in WORKOUT_SPLITS!');
     console.error('📋 Available categories:', Object.keys(WORKOUT_SPLITS).join(', '));
