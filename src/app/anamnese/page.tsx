@@ -7,14 +7,14 @@ import Link from 'next/link';
 const AnamnesePage = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    name: '',
-    birthDate: '',
-    sex: '',
-    height: '',
-    weight: '',
-    activityLevel: '',
-    experience: '',
-    category: '',
+    nome: '',
+    idade: '',
+    peso: '',
+    altura: '',
+    objetivo: '',
+    nivel: '',
+    localTreino: '',
+    categoria: '',
     specificGoal: '',
     availableDays: '',
     timePerWorkout: '',
@@ -43,24 +43,37 @@ const AnamnesePage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // CRITICAL FIX: Map experience to level correctly
-    const nivelMap: Record<string, 'beginner' | 'intermediate' | 'advanced' | 'pro'> = {
-      'none': 'beginner',
-      'beginner': 'beginner',
-      'intermediate': 'intermediate',
-      'advanced': 'advanced'
+    // CRITICAL FIX: Map objective to categoria correctly
+    const objetivoMap: Record<string, string> = {
+      'hypertrophy': 'hipertrofia',
+      'weight_loss': 'emagrecimento',
+      'strength': 'forca',
+      'endurance': 'resistencia',
+      'abs_challenge': 'saude',
+      'shape_evolution': 'saude'
     };
     
     const formDataComNivel = {
       ...formData,
-      level: nivelMap[formData.experience] || 'intermediate',
-      age: new Date().getFullYear() - new Date(formData.birthDate).getFullYear(),
-      weight: parseFloat(String(formData.weight)),
-      height: parseFloat(String(formData.height))
+      nome: formData.nome,
+      idade: parseInt(String(formData.idade)) || 25,
+      peso: parseFloat(String(formData.peso)) || 70,
+      altura: parseFloat(String(formData.altura)) || 170,
+      objetivo: objetivoMap[formData.categoria] || 'hipertrofia',
+      nivel: formData.nivel || 'intermediario',
+      localTreino: formData.localTreino || 'academia'
     };
     
     console.log('💾 Saving to localStorage:', formDataComNivel);
-    console.log('📊 Experience:', formData.experience, '| Calculated Level:', formDataComNivel.level);
+    console.log('📊 Data:', {
+      nome: formDataComNivel.nome,
+      idade: formDataComNivel.idade,
+      peso: formDataComNivel.peso,
+      altura: formDataComNivel.altura,
+      objetivo: formDataComNivel.objetivo,
+      nivel: formDataComNivel.nivel,
+      localTreino: formDataComNivel.localTreino
+    });
     
     localStorage.setItem('anamneseData', JSON.stringify(formDataComNivel));
     router.push('/dashboard');
@@ -80,13 +93,13 @@ const AnamnesePage = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="nome" className="block text-sm font-medium text-gray-700 mb-1">
                     Full Name *
                   </label>
                   <input
                     type="text"
-                    id="name"
-                    name="name"
+                    id="nome"
+                    name="nome"
                     required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     onChange={handleChange}
@@ -94,33 +107,34 @@ const AnamnesePage = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700 mb-1">
-                    Date of Birth *
+                  <label htmlFor="idade" className="block text-sm font-medium text-gray-700 mb-1">
+                    Age *
                   </label>
                   <input
-                    type="date"
-                    id="birthDate"
-                    name="birthDate"
+                    type="number"
+                    id="idade"
+                    name="idade"
                     required
+                    placeholder="e.g., 25"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     onChange={handleChange}
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="sex" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="sexo" className="block text-sm font-medium text-gray-700 mb-1">
                     Biological Sex *
                   </label>
                   <select
-                    id="sex"
-                    name="sex"
+                    id="sexo"
+                    name="sexo"
                     required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
+                    <option value="masculino">Male</option>
+                    <option value="feminino">Female</option>
                   </select>
                 </div>
               </div>
@@ -132,13 +146,13 @@ const AnamnesePage = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="height" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="altura" className="block text-sm font-medium text-gray-700 mb-1">
                     Height (cm) *
                   </label>
                   <input
                     type="number"
-                    id="height"
-                    name="height"
+                    id="altura"
+                    name="altura"
                     required
                     placeholder="e.g., 175"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -147,13 +161,13 @@ const AnamnesePage = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="weight" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="peso" className="block text-sm font-medium text-gray-700 mb-1">
                     Weight (kg) *
                   </label>
                   <input
                     type="number"
-                    id="weight"
-                    name="weight"
+                    id="peso"
+                    name="peso"
                     required
                     step="0.1"
                     placeholder="e.g., 70.5"
@@ -170,12 +184,12 @@ const AnamnesePage = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="categoria" className="block text-sm font-medium text-gray-700 mb-1">
                     Main Category *
                   </label>
                   <select
-                    id="category"
-                    name="category"
+                    id="categoria"
+                    name="categoria"
                     required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     onChange={handleChange}
@@ -225,21 +239,20 @@ const AnamnesePage = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="experience" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="nivel" className="block text-sm font-medium text-gray-700 mb-1">
                     Training Experience *
                   </label>
                   <select
-                    id="experience"
-                    name="experience"
+                    id="nivel"
+                    name="nivel"
                     required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    <option value="none">No experience</option>
-                    <option value="beginner">Beginner (up to 6 months)</option>
-                    <option value="intermediate">Intermediate (6 months - 2 years)</option>
-                    <option value="advanced">Advanced (more than 2 years)</option>
+                    <option value="iniciante">Beginner (up to 6 months)</option>
+                    <option value="intermediario">Intermediate (6 months - 2 years)</option>
+                    <option value="avancado">Advanced (more than 2 years)</option>
                   </select>
                 </div>
                 
@@ -287,21 +300,19 @@ const AnamnesePage = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="workoutLocation" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="localTreino" className="block text-sm font-medium text-gray-700 mb-1">
                     Workout Location *
                   </label>
                   <select
-                    id="workoutLocation"
-                    name="workoutLocation"
+                    id="localTreino"
+                    name="localTreino"
                     required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    <option value="gym">Gym</option>
-                    <option value="home">Home</option>
-                    <option value="park">Park/Outdoors</option>
-                    <option value="club">Club</option>
+                    <option value="academia">Gym</option>
+                    <option value="casa">Home</option>
                   </select>
                 </div>
               </div>
@@ -311,7 +322,7 @@ const AnamnesePage = () => {
                   Available Equipment (check all that you have access to)
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  {['Bars', 'Dumbbells', 'Resistance Bands', 'Kettlebell', 'Treadmill', 'Bike', 'Pull-up Bar', 'Mat', 'Swiss Ball', 'Box/Plyometric', 'Medicine Ball', 'No equipment'].map((equip) => (
+                  {['Barras', 'Halteres', 'Elásticos', 'Kettlebell', 'Esteira', 'Bicicleta', 'Barra Fixa', 'Tapete', 'Bola Suíça', 'Caixa/Pliométrico', 'Bola Medicinal', 'Sem equipamento'].map((equip) => (
                     <label key={equip} className="flex items-center">
                       <input
                         type="checkbox"
@@ -416,11 +427,11 @@ const AnamnesePage = () => {
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    <option value="excellent">Excellent</option>
-                    <option value="good">Good</option>
-                    <option value="fair">Fair</option>
-                    <option value="poor">Poor</option>
-                    <option value="very_poor">Very Poor</option>
+                    <option value="excelente">Excellent</option>
+                    <option value="boa">Good</option>
+                    <option value="regular">Fair</option>
+                    <option value="ruim">Poor</option>
+                    <option value="muito_ruim">Very Poor</option>
                   </select>
                 </div>
                 
@@ -452,10 +463,10 @@ const AnamnesePage = () => {
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    <option value="low">Low</option>
-                    <option value="moderate">Moderate</option>
-                    <option value="high">High</option>
-                    <option value="very_high">Very High</option>
+                    <option value="baixo">Low</option>
+                    <option value="moderado">Moderate</option>
+                    <option value="alto">High</option>
+                    <option value="muito_alto">Very High</option>
                   </select>
                 </div>
                 
@@ -471,11 +482,11 @@ const AnamnesePage = () => {
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    <option value="excellent">Excellent</option>
-                    <option value="good">Good</option>
-                    <option value="fair">Fair</option>
-                    <option value="poor">Poor</option>
-                    <option value="very_poor">Very Poor</option>
+                    <option value="excelente">Excellent</option>
+                    <option value="boa">Good</option>
+                    <option value="regular">Fair</option>
+                    <option value="ruim">Poor</option>
+                    <option value="muito_ruim">Very Poor</option>
                   </select>
                 </div>
               </div>
@@ -498,9 +509,9 @@ const AnamnesePage = () => {
                     onChange={handleChange}
                   >
                     <option value="">Select</option>
-                    <option value="never">Never trained</option>
-                    <option value="trained_before">Trained before but stopped</option>
-                    <option value="currently_training">Currently training</option>
+                    <option value="nunca">Never trained</option>
+                    <option value="treinou_antes">Trained before but stopped</option>
+                    <option value="treina_atualmente">Currently training</option>
                   </select>
                 </div>
                 
